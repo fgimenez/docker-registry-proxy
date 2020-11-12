@@ -27,7 +27,6 @@ workflows:
     jobs:
       - buildImage:
           context: dockerhub-bot
-          context: dockerhub-bot
           filters:
             tags:
               only: /.*/

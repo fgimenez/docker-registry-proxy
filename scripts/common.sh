@@ -9,5 +9,5 @@ docker_tag_and_push(){
 }
 
 docker_login(){
-    docker login -u ${DOCKER_USER} -p "${DOCKER_PASSWORD}" ${DOCKER_REGISTRY}
+    docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}" ${DOCKER_REGISTRY}
 }
