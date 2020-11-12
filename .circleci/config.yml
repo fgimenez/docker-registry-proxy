@@ -1,0 +1,41 @@
+version: 2
+
+jobs:
+  buildImage:
+    docker:
+      - image: docker:19.03
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          command: |
+            ./scripts/build-image.sh fgimenez/docker-registry-proxy .
+
+  publishImage:
+    docker:
+      - image: docker:19.03
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          command: |
+            ./scripts/publish-image.sh fgimenez/docker-registry-proxy
+
+workflows:
+  version: 2
+  test_and_deploy:
+    jobs:
+      - buildImage:
+          context: dockerhub-bot
+          filters:
+            tags:
+              only: /.*/
+      - publishImage:
+          context: dockerhub-bot
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/
+          requires:
+            - buildImage
