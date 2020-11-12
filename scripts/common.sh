@@ -1,5 +1,4 @@
 #!/bin/bash
-export TAG=${CIRCLE_TAG:-$(git describe --tags)}
 
 docker_tag_and_push(){
     local tag=${1}
